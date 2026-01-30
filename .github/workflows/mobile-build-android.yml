@@ -78,7 +78,7 @@ jobs:
 
       - name: Copy keystore to Android project
         run: |
-          cp release.keystore android/app/release.keystore
+          cp release.keystore android/release.keystore
 
       - name: Build Android APK
         working-directory: ./android
@@ -88,7 +88,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
           ./gradlew assembleRelease \
-            -Pandroid.injected.signing.store.file=app/release.keystore \
+            -Pandroid.injected.signing.store.file=release.keystore \
             -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
             -Pandroid.injected.signing.key.password=$KEY_PASSWORD \
