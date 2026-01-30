@@ -57,6 +57,9 @@ jobs:
       - name: Install TypeScript in root
         run: npm install typescript
 
+      - name: Install Capacitor Android
+        run: npm install @capacitor/android
+
       - name: Add Android platform
         run: npx cap add android
 
