@@ -66,6 +66,21 @@ jobs:
       - name: Sync Capacitor Android project
         run: npx cap sync android
 
+      - name: Fix Kotlin dependency conflicts
+        run: |
+          cat >> android/app/build.gradle << 'EOF'
+
+          // Fix Kotlin stdlib version conflicts
+          configurations.all {
+            resolutionStrategy {
+              dependencySubstitution {
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk7') with module('org.jetbrains.kotlin:kotlin-stdlib:1.8.22')
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module('org.jetbrains.kotlin:kotlin-stdlib:1.8.22')
+              }
+            }
+          }
+          EOF
+
       - name: Copy keystore to Android project
         run: |
           cp release.keystore android/app/release.keystore
@@ -81,7 +96,9 @@ jobs:
             -Pandroid.injected.signing.store.file=app/release.keystore \
             -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
-            -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+            -Pandroid.injected.signing.key.password=$KEY_PASSWORD \
+            -Dorg.gradle.jvmargs="-Xmx2048m" \
+            --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
