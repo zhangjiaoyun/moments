@@ -69,12 +69,49 @@ const global = useGlobalState();
 const open = useState<boolean>("sidebarOpen", () => false);
 const currentUser = useState<UserVO>("userinfo");
 const sysConfig = useState<SysConfigVO>("sysConfig");
-const currentProfile = await useMyFetch<UserVO>("/user/profile");
-const sysConfigVO = await useMyFetch<SysConfigVO>("/sysConfig/get");
-if (currentProfile) {
-  currentUser.value = currentProfile;
-  sysConfig.value = sysConfigVO;
+
+let currentProfile = null;
+let sysConfigVO: SysConfigVO = {
+  title: "极简朋友圈",
+  favicon: "/favicon.png",
+  enableS3: false,
+  enableAutoLoadNextPage: false,
+  enableGoogleRecaptcha: false,
+  enableComment: true,
+  maxCommentLength: 300,
+  commentOrder: "desc",
+  timeFormat: "timeAgo",
+  enableRegister: false,
+  version: "",
+  commitId: "",
+  adminUserName: "",
+  beiAnNo: "",
+  css: "",
+  js: "",
+  rss: "",
+  googleSiteKey: "",
+  memoMaxHeight: 0,
+  s3: {
+    thumbnailSuffix: ""
+  },
+  enableEmail: false,
+  smtpHost: "",
+  smtpPort: "",
+  smtpUsername: "",
+  smtpPassword: ""
+};
+
+try {
+  currentProfile = await useMyFetch<UserVO>("/user/profile");
+  sysConfigVO = await useMyFetch<SysConfigVO>("/sysConfig/get");
+  if (currentProfile) {
+    currentUser.value = currentProfile;
+    sysConfig.value = sysConfigVO;
+  }
+} catch (error) {
+  console.error("获取配置失败:", error);
 }
+
 const { y } = useWindowScroll();
 useHead({
   title: sysConfigVO.title,

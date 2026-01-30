@@ -13,6 +13,7 @@ ARG VERSION
 ARG COMMIT_ID
 WORKDIR /app
 RUN apk add --no-cache build-base tzdata
+ENV GOPROXY=https://goproxy.cn,direct
 COPY backend/go.mod .
 COPY backend/go.sum .
 RUN go mod download
@@ -22,7 +23,10 @@ RUN go build -tags prod -ldflags="-s -w -X main.version=${VERSION} -X main.commi
 
 FROM alpine
 WORKDIR /app/data
-RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
+RUN echo "https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.20/main" > /etc/apk/repositories && \
+    echo "https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.20/community" >> /etc/apk/repositories && \
+    apk update& & \
+    apk update --no-cache && apk add --no-cache ca-certificates tzdata
 ENV PORT=3000
 ENV TZ=Asia/Shanghai
 COPY --from=backend /app/moments /app/moments

@@ -16,8 +16,10 @@ const reload = async () => {
   memo.value = await useMyFetch<MemoVO>('/memo/get?id=' + id)
 }
 
-memoChangedEvent.on(async () => {
-  await reload()
+memoChangedEvent.on(async (changedId: number) => {
+  if (changedId === id) {
+    await reload()
+  }
 })
 onMounted(async () => {
   await reload()

@@ -1,0 +1,9 @@
+docker run -d \
+  -e PORT=3000 \
+  -e JWT_KEY=sinatk \
+  -p 5801:3000 \
+  -v /root/b:/app/data \
+  --name moments \
+  azhengmoments
+
+

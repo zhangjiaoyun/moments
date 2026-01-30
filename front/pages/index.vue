@@ -1,5 +1,51 @@
 <template>
   <Header v-bind:user="currentUser"/>
+
+  <!-- 搜索框 -->
+  <div class="search-container px-4 py-3 mb-2">
+    <div class="flex gap-2">
+      <UInput
+        v-model="searchKeyword"
+        placeholder="搜索动态内容..."
+        size="lg"
+        icon="i-heroicons-magnifying-glass"
+        :ui="{ icon: { trailing: { pointer: '' } } }"
+        class="flex-1"
+        @keyup.enter="handleSearch"
+      >
+        <template #trailing>
+          <UButton
+            v-show="searchKeyword !== ''"
+            color="gray"
+            variant="link"
+            icon="i-heroicons-x-mark-20-solid"
+            :padded="false"
+            @click="clearSearch"
+          />
+        </template>
+      </UInput>
+      <UButton
+        icon="i-heroicons-magnifying-glass"
+        size="lg"
+        color="primary"
+        @click="handleSearch"
+      >
+        搜索
+      </UButton>
+    </div>
+    <div v-if="isSearching" class="mt-2 text-xs text-gray-500">
+      搜索结果：共 {{ searchResultCount }} 条
+      <UButton
+        variant="link"
+        size="xs"
+        @click="clearSearch"
+        class="ml-2"
+      >
+        清除搜索
+      </UButton>
+    </div>
+  </div>
+
   <div class="flex flex-col divide-y divide-[#C0BEBF]/20 ">
     <Memo v-bind:memo="m" v-for="m in memos" :key="m.id" />
   </div>
@@ -27,7 +73,13 @@ const hasNext = ref(false)
 const state = reactive({
   page: 1,
   size: 10,
+  contentContains: '',
 })
+
+// 搜索相关状态
+const searchKeyword = ref('')
+const isSearching = ref(false)
+const searchResultCount = ref(0)
 
 const memos = ref<Array<MemoVO>>([])
 onMounted(async () => {
@@ -43,6 +95,9 @@ const reload = async () => {
   }>('/memo/list', state)
   memos.value = res.list
   hasNext.value = res.hasNext
+  if (isSearching.value) {
+    searchResultCount.value = res.total
+  }
 }
 
 const loadMore = async () => {
@@ -54,6 +109,25 @@ const loadMore = async () => {
   }>('/memo/list', state)
   memos.value = [...memos.value, ...res.list]
   hasNext.value = res.hasNext
+}
+
+// 搜索功能
+const handleSearch = async () => {
+  if (searchKeyword.value.trim() === '') {
+    return
+  }
+  state.contentContains = searchKeyword.value.trim()
+  isSearching.value = true
+  await reload()
+}
+
+// 清除搜索
+const clearSearch = async () => {
+  searchKeyword.value = ''
+  state.contentContains = ''
+  isSearching.value = false
+  searchResultCount.value = 0
+  await reload()
 }
 
 memoReloadEvent.on(async () => {

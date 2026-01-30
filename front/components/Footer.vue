@@ -3,15 +3,16 @@
     <div class="flex flex-col gap-1 items-center">
       <NuxtLink
         v-if="!starsLoadFailed"
-        to="https://github.com/kingwrcy/moments"
+        to="https://www.mintaoke.cn"
         target="_blank"
       >
-        <img
+        六量整mintaoke.cn提供技术支持
+        <!-- <img
           src="https://img.shields.io/github/stars/kingwrcy/moments"
           class="h-6 inline-block mr-1"
           alt="github"
           @error="onStarsLoadFailed"
-        />
+        /> -->
       </NuxtLink>
       <a
         v-if="sysConfig.beiAnNo"
