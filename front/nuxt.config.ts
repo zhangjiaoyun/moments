@@ -71,5 +71,12 @@ export default defineNuxtConfig({
                 }
             }
         }
+    },
+    runtimeConfig: {
+        public: {
+            // 从环境变量读取 API baseUrl，默认为空字符串（使用相对路径）
+            // Android App 构建时通过 NUXT_PUBLIC_API_BASE_URL 环境变量注入完整 URL
+            apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || ''
+        }
     }
 })
