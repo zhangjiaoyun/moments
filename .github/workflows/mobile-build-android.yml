@@ -57,11 +57,9 @@ jobs:
       - name: Sync Capacitor Android project
         run: npx cap sync android
 
-      - name: Decode keystore
-        env:
-          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - name: Copy keystore to Android project
         run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+          cp release.keystore android/app/release.keystore
 
       - name: Build Android APK
         working-directory: ./android

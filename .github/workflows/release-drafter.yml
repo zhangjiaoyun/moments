@@ -1,8 +1,6 @@
 name: Create Or Update Release Draft
 on:
-  push:
-    branches:
-      - dev
+  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
