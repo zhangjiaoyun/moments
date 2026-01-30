@@ -43,7 +43,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: ./front
-        run: pnpm install --no-workspace-root
+        run: pnpm install
 
       - name: Build frontend with API base URL
         working-directory: ./front
