@@ -68,18 +68,20 @@ jobs:
 
       - name: Fix Kotlin dependency conflicts
         run: |
-          cat >> android/app/build.gradle << 'EOF'
-
-          // Fix Kotlin stdlib version conflicts
-          configurations.all {
-            resolutionStrategy {
-              dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk7') with module('org.jetbrains.kotlin:kotlin-stdlib:1.8.22')
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module('org.jetbrains.kotlin:kotlin-stdlib:1.8.22')
+          cat > android/build.gradle.fix << 'EOF'
+          subprojects {
+            configurations.all {
+              resolutionStrategy {
+                dependencySubstitution {
+                  substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk7') with module('org.jetbrains.kotlin:kotlin-stdlib:1.8.22')
+                  substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module('org.jetbrains.kotlin:kotlin-stdlib:1.8.22')
+                }
               }
             }
           }
           EOF
+          # Append the fix to the main build.gradle
+          cat android/build.gradle.fix >> android/build.gradle
 
       - name: Copy keystore to Android project
         run: |
