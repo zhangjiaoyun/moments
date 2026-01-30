@@ -57,6 +57,9 @@ jobs:
       - name: Install TypeScript in root
         run: npm install typescript
 
+      - name: Add Android platform
+        run: npx cap add android
+
       - name: Sync Capacitor Android project
         run: npx cap sync android
 
