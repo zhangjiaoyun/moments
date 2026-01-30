@@ -89,16 +89,16 @@ jobs:
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
           ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=app/release.keystore \
             -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
             -Pandroid.injected.signing.key.password=$KEY_PASSWORD \
             -Dorg.gradle.jvmargs="-Xmx2048m"
 
-      - name: Find APK file
+      - name: Check build results
         run: |
-          find android -name "*.apk" -type f
-          ls -la android/app/build/outputs/apk/release/ 2>/dev/null || echo "Release APK directory not found"
-          ls -la android/app/build/outputs/ 2>/dev/null || echo "Build outputs directory not found"
+          echo "=== Checking for APK files ==="
+          find android -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -127,6 +127,5 @@ jobs:
           files: android/app/build/outputs/apk/release/app-release.apk
           draft: false
           prerelease: false
-          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
