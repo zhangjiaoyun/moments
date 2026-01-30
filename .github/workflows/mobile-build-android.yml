@@ -52,7 +52,10 @@ jobs:
         run: pnpm run generate
 
       - name: Install Capacitor CLI
-        run: npm install -g @capacitor/cli typescript
+        run: npm install -g @capacitor/cli
+
+      - name: Install TypeScript in root
+        run: npm install typescript
 
       - name: Sync Capacitor Android project
         run: npx cap sync android

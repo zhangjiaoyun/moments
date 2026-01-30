@@ -7,7 +7,9 @@
       "Bash(findstr:*)",
       "Bash(curl:*)",
       "Bash(taskkill:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "WebSearch",
+      "WebFetch(domain:capacitorjs.com)"
     ],
     "deny": [],
     "ask": []
