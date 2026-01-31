@@ -70,7 +70,6 @@ const open = useState<boolean>("sidebarOpen", () => false);
 const currentUser = useState<UserVO>("userinfo");
 const sysConfig = useState<SysConfigVO>("sysConfig");
 
-let currentProfile = null;
 let sysConfigVO: SysConfigVO = {
   title: "极简朋友圈",
   favicon: "/favicon.png",
@@ -101,16 +100,22 @@ let sysConfigVO: SysConfigVO = {
   smtpPassword: ""
 };
 
-try {
-  currentProfile = await useMyFetch<UserVO>("/user/profile");
-  sysConfigVO = await useMyFetch<SysConfigVO>("/sysConfig/get");
-  if (currentProfile) {
-    currentUser.value = currentProfile;
-    sysConfig.value = sysConfigVO;
+// 将 API 调用移到 onMounted 中，确保在客户端执行
+onMounted(async () => {
+  try {
+    const currentProfile = await useMyFetch<UserVO>("/user/profile");
+    const fetchedConfig = await useMyFetch<SysConfigVO>("/sysConfig/get");
+    if (currentProfile) {
+      currentUser.value = currentProfile;
+    }
+    if (fetchedConfig) {
+      sysConfigVO = fetchedConfig;
+      sysConfig.value = fetchedConfig;
+    }
+  } catch (error) {
+    console.error("获取配置失败:", error);
   }
-} catch (error) {
-  console.error("获取配置失败:", error);
-}
+});
 
 const { y } = useWindowScroll();
 useHead({
