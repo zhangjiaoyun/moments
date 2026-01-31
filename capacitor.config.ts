@@ -8,7 +8,9 @@ const config: CapacitorConfig = {
   server: {
     // Android App 使用的后端 URL
     androidScheme: 'https',
-    hostname: 'x.tkdan.cn',
+    // 移除 hostname 配置以避免 Capacitor 将所有请求视为静态资产
+    // 这允许应用正确向外部 API 端点发送请求
+    // hostname: 'x.tkdan.cn',
     androidNavigationMode: 'history',
   },
   plugins: {
