@@ -7,6 +7,9 @@ import { createHighlighterCore } from "shiki/core"
 
 const global = useGlobalState()
 
+// API 基础 URL 配置
+const API_BASE_URL = 'https://x.tkdan.cn'
+
 export const useMyFetch = async <T>(url: string, data?: any) => {
   const headers: Record<string, string> = {}
 
@@ -15,7 +18,10 @@ export const useMyFetch = async <T>(url: string, data?: any) => {
     headers["x-api-token"] = userinfo.token
   }
 
-  const res = await $fetch<ResultVO<T>>(`/api${url}`, {
+  // 构建完整的 API URL（使用绝对路径，不依赖环境变量或运行时检测）
+  const fullUrl = `${API_BASE_URL}/api${url}`
+
+  const res = await $fetch<ResultVO<T>>(fullUrl, {
     method: "post",
     body: data ? JSON.stringify(data) : null,
     headers: headers,
@@ -125,7 +131,9 @@ const uploadFile2ServerWithProgress = (
     )
     xhr.upload.addEventListener("progress", e => onProgress(e.loaded / e.total))
 
-    xhr.open("POST", url, true)
+    // 构建完整 URL
+    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`
+    xhr.open("POST", fullUrl, true)
 
     const userinfo = global.value.userinfo
     if (userinfo.token) {
