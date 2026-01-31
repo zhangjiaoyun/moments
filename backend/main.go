@@ -98,6 +98,14 @@ func main() {
 			AllowMethods:     []string{http.MethodGet, http.MethodPost},
 			AllowHeaders:     []string{echo.HeaderContentType, "X-API-TOKEN"},
 		}))
+	} else {
+		// 如果没有配置 CORS_ORIGIN，使用默认配置允许所有来源（Capacitor 应用需要）
+		e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowCredentials: true,
+			AllowOrigins:     []string{"*"},
+			AllowMethods:     []string{http.MethodGet, http.MethodPost},
+			AllowHeaders:     []string{echo.HeaderContentType, "X-API-TOKEN"},
+		}))
 	}
 
 	migrateTo3(tx, myLogger)
