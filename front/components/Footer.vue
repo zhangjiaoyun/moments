@@ -15,7 +15,7 @@
         /> -->
       </NuxtLink>
       <a
-        v-if="sysConfig.beiAnNo"
+        v-if="sysConfig?.beiAnNo"
         class="my-2 text-gray-500"
         href="https://beian.miit.gov.cn/"
         target="_blank"
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import type { SysConfigVO } from "~/types";
 
-const sysConfig = useState<SysConfigVO>("sysConfig");
+const sysConfig = useState<SysConfigVO | undefined>("sysConfig");
 
 const starsLoadFailed = ref<boolean>(false);
 const onStarsLoadFailed = () => {
