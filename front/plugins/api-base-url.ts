@@ -1,6 +1,23 @@
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin(async () => {
   const config = useRuntimeConfig()
-  const apiBaseUrl = config.public.apiBaseUrl as string
+  let apiBaseUrl = config.public.apiBaseUrl as string
+
+  // 如果没有配置 apiBaseUrl，检查是否在 Capacitor 环境中
+  if (!apiBaseUrl) {
+    // 检查是否在 Capacitor 环境
+    if (typeof window !== 'undefined' && (window as any).Capacitor) {
+      const Capacitor = (window as any).Capacitor
+      const isNative = Capacitor.isNativePlatform()
+
+      if (isNative) {
+        // 在 Capacitor 环境中，使用 capacitor.config.ts 中配置的 hostname
+        // 构建完整的 API URL
+        const protocol = 'https'
+        const hostname = 'x.tkdan.cn'  // 与 capacitor.config.ts 中的 hostname 保持一致
+        apiBaseUrl = `${protocol}://${hostname}`
+      }
+    }
+  }
 
   // 如果配置了 apiBaseUrl，则拦截 fetch 请求，为 API 路径添加前缀
   if (apiBaseUrl) {
