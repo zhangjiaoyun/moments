@@ -43,6 +43,10 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          ndk: 26.1.10909125
+          cmake: '3.22.1'
 
       - name: Install frontend dependencies
         working-directory: ./front
