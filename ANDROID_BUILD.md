@@ -59,7 +59,6 @@ base64 -w 0 moments-release.jks > keystore-base64.txt
 | Secret 名称 | 说明 | 示例 |
 |------------|------|------|
 | `ANDROID_KEYSTORE_BASE64` | keystore 文件的 Base64 编码 | `keystore-base64.txt` 文件内容 |
-| `ANDROID_KEY_ALIAS` | 密钥别名 | `moments-key` |
 | `ANDROID_KEY_PASSWORD` | 密钥密码 | 创建 keystore 时设置的 key password |
 | `ANDROID_STORE_PASSWORD` | 密钥库密码 | 创建 keystore 时设置的 store password |
 
