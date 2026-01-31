@@ -64,8 +64,19 @@ export default defineNuxtConfig({
                 },
             },
         },
+        esbuild: {
+            target: 'es2015'
+        },
         build: {
-            target: 'es2020',
+            target: 'es2015',
+            minify: 'terser',
+            terserOptions: {
+                compress: true,
+                mangle: true,
+                output: {
+                    comments: false
+                }
+            },
             rollupOptions: {
                 output: {
                     hashCharacters: 'base36'
